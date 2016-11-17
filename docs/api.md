@@ -55,6 +55,12 @@ It can be used alone or in conjunction with `cache.maxEntries`.
 
 _Default_: `null`
 
+
+### cache.ignoreSearch [boolean]
+Ignore the search query string when matching against the cache. This is passed to `cache.match`
+
+_Default_: `false`
+
 ## Handlers
 
 There are five built-in handlers to cover the most common network strategies. For more information about offline strategies see the [Offline Cookbook](http://jakearchibald.com/2014/offline-cookbook/).
