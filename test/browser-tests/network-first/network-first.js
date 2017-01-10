@@ -103,6 +103,122 @@ describe('Test toolbox.networkFirst', function() {
     });
   });
 
+  it('should ignore query string if set to ignore all', function() {
+    let iframe;
+    const TEST_INPUT = 'Hello, World!';
+    return swUtils.activateSW(serviceWorkersFolder + '/network-first-ignore-query.js')
+    .then(newIframe => {
+      iframe = newIframe;
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(() => {
+      // call with query string
+      return iframe.contentWindow.fetch('/test/data/files/text.txt?foo=bar');
+    })
+    .then(response => {
+      response.status.should.equal(200);
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(cache => {
+      return cache.match('/test/data/files/text.txt');
+    })
+    .then(response => {
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    });
+  });
+
+  it('should ignore specific query string key if set to ignore', function() {
+    let iframe;
+    const TEST_INPUT = 'Hello, World 1!';
+    return swUtils.activateSW(serviceWorkersFolder + '/network-first-ignore-query.js')
+    .then(newIframe => {
+      iframe = newIframe;
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(() => {
+      // call with query string
+      return iframe.contentWindow.fetch('/test/data/files/text-1.txt?foo=bar&baz=bang');
+    })
+    .then(response => {
+      response.status.should.equal(200);
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(cache => {
+      return cache.match('/test/data/files/text-1.txt?baz=bang');
+    })
+    .then(response => {
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    });
+  });
+
+  it('should by default not ignore query string', function() {
+    let iframe;
+    const TEST_INPUT = 'Hello, World 2!';
+    return swUtils.activateSW(serviceWorkersFolder + '/network-first-ignore-query.js')
+    .then(newIframe => {
+      iframe = newIframe;
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(() => {
+      // call with query string
+      return iframe.contentWindow.fetch('/test/data/files/text-2.txt?foo=bar&baz=bang');
+    })
+    .then(response => {
+      response.status.should.equal(200);
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(cache => {
+      return cache.match('/test/data/files/text-2.txt?foo=bar&baz=bang');
+    })
+    .then(response => {
+      return response.text();
+    })
+    .then(responseText => {
+      responseText.trim().should.equal(TEST_INPUT);
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(cache => {
+      return cache.match('/test/data/files/text-2.txt');
+    })
+    .then(response => {
+      if (response !== undefined) {
+        throw new Error('response should be undefined');
+      }
+    });
+  });
+
   it('should handle redirects correctly', done => {
     swUtils.activateSW(serviceWorkersFolder + '/redirects.js')
     .then(() => {
