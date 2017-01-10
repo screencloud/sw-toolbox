@@ -23,6 +23,19 @@ will automatically fall back to the cached response if one exists. When
 
 _Default_: `null`
 
+
+#### ignoreUrlParametersMatching [Array&#x27e8;Regex&#x27e9;]
+`sw-precache` finds matching cache entries by doing a comparison with the full request URL. It's
+common for sites to support URL query parameters that don't affect the site's content and should
+be effectively ignored for the purposes of cache matching. One example is the
+[`utm_`-prefixed](https://support.google.com/analytics/answer/1033867) parameters used for tracking
+campaign performance. By default, `sw-precache` will ignore `key=value` when `key` matches _any_ of
+the regular expressions provided in this option.
+To ignore all parameters, use `[/./]`. To take all parameters into account when matching, use `[]`.
+
+_Default_: `[/^utm_/]`
+
+
 ### cache [Object]
 Various properties of `cache` control the behavior of the default cache when set via
 `toolbox.options.cache`, or the cache used by a specific request handler.
@@ -55,11 +68,6 @@ It can be used alone or in conjunction with `cache.maxEntries`.
 
 _Default_: `null`
 
-
-### cache.ignoreSearch [boolean]
-Ignore the search query string when matching against the cache. This is passed to `cache.match`
-
-_Default_: `false`
 
 ## Handlers
 
