@@ -219,8 +219,8 @@ describe('Test toolbox.networkFirst', function() {
     });
   });
 
-  it('should handle redirects correctly', done => {
-    swUtils.activateSW(serviceWorkersFolder + '/redirects.js')
+  it('should handle redirects correctly', () => {
+    return swUtils.activateSW(serviceWorkersFolder + '/redirects.js')
     .then(() => {
       const redirectTest = () => {
         return swUtils.getIframe()
@@ -264,8 +264,6 @@ describe('Test toolbox.networkFirst', function() {
       .then(() => {
         return redirectTest();
       });
-    })
-    .then(() => done())
-    .catch(done);
+    });
   });
 });
