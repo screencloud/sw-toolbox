@@ -23,6 +23,13 @@ will automatically fall back to the cached response if one exists. When
 
 _Default_: `null`
 
+### offlineTimeoutSeconds [Number]
+A timeout that applies to the `toolbox.networkFirst` built-in handler when navigator is not onLine
+If `offlineTimeoutSeconds` is set, then any network requests that take longer than that amount of time
+will automatically fall back to the cached response if one exists. When
+`offlineTimeoutSeconds` is not set, networkTimeoutSeconds or the browser's native networking timeout logic applies.
+
+_Default_: `null`
 
 #### ignoreUrlParametersMatching [Array&#x27e8;Regex&#x27e9;]
 `sw-precache` finds matching cache entries by doing a comparison with the full request URL. It's
