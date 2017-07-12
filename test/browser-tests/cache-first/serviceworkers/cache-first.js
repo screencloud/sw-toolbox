@@ -18,9 +18,26 @@
 
 /* eslint-env worker, serviceworker */
 
-importScripts('/build/sw-toolbox.js');
+importScripts('/sw-toolbox.js');
 importScripts('/test/data/skip-and-claim.js');
 
 self.toolbox.options.cache.name = 'test-cache-name';
 
 self.toolbox.router.get('/test/data/files/text.txt', self.toolbox.cacheFirst);
+self.toolbox.router.get('/get-cache-value-ignore-search-true', self.toolbox.cacheFirst, {
+  cache: {
+    name: 'test-cache-name',
+    queryOptions: {
+      ignoreSearch: true
+    }
+  }
+});
+
+self.toolbox.router.get('/get-cache-value-ignore-search-false', self.toolbox.cacheFirst, {
+  cache: {
+    name: 'test-cache-name',
+    queryOptions: {
+      ignoreSearch: false
+    }
+  }
+});
